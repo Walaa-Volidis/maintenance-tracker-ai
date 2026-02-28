@@ -5,7 +5,7 @@ from app.crud import create_request, get_all_requests
 from app.database import get_db
 from app.schemas import RequestCreate, RequestResponse
 
-router = APIRouter(prefix="/requests", tags=["Maintenance Requests"])
+router = APIRouter(tags=["Maintenance Requests"])
 
 
 @router.post(

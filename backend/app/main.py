@@ -7,7 +7,10 @@ from app.database import Base, engine
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Maintenance Request Tracker API")
+app = FastAPI(
+    title="Maintenance Request Tracker API",
+    redirect_slashes=False,
+)
 
 # Support comma-separated origins so localhost + Vercel production both work.
 _origins = [o.strip() for o in settings.frontend_url.split(",") if o.strip()]
@@ -20,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(requests_router, prefix="/api")
+app.include_router(requests_router, prefix="/api/requests")
 
 
 @app.get("/")

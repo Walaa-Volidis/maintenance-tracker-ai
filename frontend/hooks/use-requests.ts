@@ -23,7 +23,7 @@ export function useRequests(): UseRequestsReturn {
     try {
       setIsLoading(true);
       setError(null);
-      const { data } = await api.get<MaintenanceRequest[]>('/requests');
+      const { data } = await api.get<MaintenanceRequest[]>('/api/requests');
       setRequests(data);
     } catch (err) {
       const message =
@@ -40,7 +40,10 @@ export function useRequests(): UseRequestsReturn {
 
   const createRequest = useCallback(
     async (payload: MaintenanceRequestCreate): Promise<MaintenanceRequest> => {
-      const { data } = await api.post<MaintenanceRequest>('/requests', payload);
+      const { data } = await api.post<MaintenanceRequest>(
+        '/api/requests',
+        payload,
+      );
       setRequests((prev) => [data, ...prev]);
       return data;
     },
