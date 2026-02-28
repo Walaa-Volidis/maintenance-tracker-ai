@@ -3,10 +3,10 @@ from collections.abc import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
-SQLITE_DATABASE_URL = "sqlite:///./maintenance.db"
+from app.core.config import settings
 
 engine = create_engine(
-    SQLITE_DATABASE_URL,
+    settings.database_url,
     connect_args={"check_same_thread": False},  # Required for SQLite
 )
 
