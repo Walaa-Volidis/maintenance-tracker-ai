@@ -6,9 +6,10 @@ export interface MaintenanceRequest {
   title: string;
   description: string;
   category: string | null;
+  ai_summary: string | null;
   priority: Priority;
   status: Status;
-  created_at: string; 
+  created_at: string;
 }
 
 export interface MaintenanceRequestCreate {

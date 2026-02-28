@@ -1,5 +1,7 @@
 'use client';
 
+import { Sparkles } from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
 import {
   Table,
@@ -9,6 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import type { MaintenanceRequest, Priority, Status } from '@/types';
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -71,8 +78,25 @@ export function RequestsTable({ requests }: RequestsTableProps) {
             {/* ID */}
             <TableCell className="font-medium">{req.id}</TableCell>
 
-            {/* Title */}
-            <TableCell className="max-w-xs truncate">{req.title}</TableCell>
+            {/* Title + AI Summary */}
+            <TableCell className="max-w-xs">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="cursor-default">
+                    <p className="truncate font-medium">{req.title}</p>
+                    {req.ai_summary && (
+                      <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+                        <Sparkles className="size-3 shrink-0 text-amber-500" />
+                        {req.ai_summary}
+                      </p>
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-xs">
+                  <p className="text-sm">{req.description}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TableCell>
 
             {/* AI Category */}
             <TableCell>

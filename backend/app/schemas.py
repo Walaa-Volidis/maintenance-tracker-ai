@@ -38,6 +38,7 @@ class RequestResponse(BaseModel):
     title: str
     description: str
     category: str | None = None
+    ai_summary: str | None = None
     priority: Priority
     status: Status
     created_at: datetime
