@@ -9,9 +9,12 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Maintenance Request Tracker API")
 
+# Support comma-separated origins so localhost + Vercel production both work.
+_origins = [o.strip() for o in settings.frontend_url.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_url],
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
