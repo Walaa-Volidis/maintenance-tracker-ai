@@ -34,6 +34,9 @@ class MaintenanceRequest(Base):
     category: Mapped[str | None] = mapped_column(
         String(100), nullable=True, default=None
     )
+    ai_summary: Mapped[str | None] = mapped_column(
+        String(500), nullable=True, default=None
+    )
     priority: Mapped[str] = mapped_column(
         Enum(Priority), nullable=False, default=Priority.LOW
     )

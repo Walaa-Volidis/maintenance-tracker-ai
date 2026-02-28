@@ -71,3 +71,44 @@ def suggest_category(description: str) -> str:
     except Exception as exc: 
         logger.error("Unexpected error in suggest_category: %s", exc)
         return DEFAULT_CATEGORY
+
+
+SUMMARY_SYSTEM_PROMPT = (
+    "You are a concise maintenance report writer. "
+    "Summarize the user's maintenance request into ONE short sentence "
+    "of no more than 10 words.\n"
+    "Rules:\n"
+    "- Output ONLY the summary sentence.\n"
+    "- Do not include any punctuation at the end, explanations, or extra words.\n"
+    "- If the request is in Arabic, understand the meaning and output the "
+    "English summary."
+)
+
+DEFAULT_SUMMARY = "Maintenance issue reported"
+
+
+def generate_summary(description: str) -> str:
+    """Use Groq to produce a <=10-word summary of a maintenance request.
+
+    Falls back to a generic summary on any failure.
+    """
+    try:
+        response = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=[
+                {"role": "system", "content": SUMMARY_SYSTEM_PROMPT},
+                {"role": "user", "content": description},
+            ],
+            temperature=0,
+            max_tokens=30,
+        )
+
+        summary = response.choices[0].message.content.strip()
+        return summary if summary else DEFAULT_SUMMARY
+
+    except GroqError as exc:
+        logger.error("Groq API error while generating summary: %s", exc)
+        return DEFAULT_SUMMARY
+    except Exception as exc: 
+        logger.error("Unexpected error in generate_summary: %s", exc)
+        return DEFAULT_SUMMARY
