@@ -4,6 +4,6 @@ sqlalchemy
 pydantic
 pydantic-settings
 python-dotenv
-openai
+groq
 python-multipart
 alembic

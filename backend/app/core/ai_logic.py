@@ -1,0 +1,73 @@
+import logging
+
+from groq import Groq, GroqError
+
+from app.core.config import settings
+
+logger = logging.getLogger(__name__)
+
+VALID_CATEGORIES: list[str] = [
+    "Plumbing",
+    "Electrical",
+    "HVAC",
+    "Furniture",
+    "General",
+]
+
+DEFAULT_CATEGORY = "General"
+
+MODEL_NAME = "llama-3.3-70b-versatile"
+
+SYSTEM_PROMPT = (
+    "You are an expert maintenance dispatcher. "
+    "Your task is to categorize the user's request into EXACTLY one of these "
+    "categories: [Plumbing, Electrical, HVAC, Furniture, General].\n"
+    "Rules:\n"
+    "- Output ONLY the category name.\n"
+    "- Do not include any punctuation, explanations, or extra words.\n"
+    "- If the request is ambiguous, default to General.\n"
+    "- If the request is in Arabic, understand the meaning and output the "
+    "English category name."
+)
+
+# Create the client once at module level
+client = Groq(api_key=settings.groq_api_key)
+
+
+def suggest_category(description: str) -> str:
+    """Use Groq (LLaMA 3.3 70B) to classify a maintenance request description.
+
+    Returns one of the valid categories. Falls back to 'General'
+    if the API call fails or returns an unexpected value.
+    """
+    try:
+        response = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": description},
+            ],
+            temperature=0,
+            max_tokens=20,
+        )
+
+        category = response.choices[0].message.content.strip()
+
+        # Validate against the allowed list (case-insensitive match)
+        for valid in VALID_CATEGORIES:
+            if category.lower() == valid.lower():
+                return valid
+
+        logger.warning(
+            "Groq returned unexpected category '%s'; defaulting to '%s'.",
+            category,
+            DEFAULT_CATEGORY,
+        )
+        return DEFAULT_CATEGORY
+
+    except GroqError as exc:
+        logger.error("Groq API error while suggesting category: %s", exc)
+        return DEFAULT_CATEGORY
+    except Exception as exc: 
+        logger.error("Unexpected error in suggest_category: %s", exc)
+        return DEFAULT_CATEGORY
