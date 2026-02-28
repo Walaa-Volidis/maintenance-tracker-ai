@@ -116,7 +116,11 @@ export function RequestForm({ onSubmit }: RequestFormProps) {
       </div>
 
       {/* Submit */}
-      <Button type="submit" disabled={isSubmitting} className="w-full">
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
+      >
         {isSubmitting ? (
           <>
             <Loader2 className="animate-spin" />

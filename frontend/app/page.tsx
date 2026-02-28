@@ -17,11 +17,11 @@ export default function DashboardPage() {
   const { requests, isLoading, error, createRequest } = useRequests();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-50">
       {/* ── Header ── */}
-      <header className="border-b bg-card">
+      <header className="border-b border-slate-200 bg-white shadow-sm">
         <div className="mx-auto flex h-16 max-w-6xl items-center px-4 sm:px-6">
-          <h1 className="text-xl font-bold tracking-tight">
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">
             Maintenance Request Tracker
           </h1>
         </div>
@@ -31,10 +31,10 @@ export default function DashboardPage() {
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <div className="grid gap-8 lg:grid-cols-[380px_1fr]">
           {/* ── Create form ── */}
-          <Card className="h-fit">
+          <Card className="h-fit border-slate-200 bg-white shadow-sm">
             <CardHeader>
-              <CardTitle>New Request</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-slate-900">New Request</CardTitle>
+              <CardDescription className="text-slate-500">
                 Submit a maintenance request — AI will auto-categorize it.
               </CardDescription>
             </CardHeader>
@@ -44,10 +44,10 @@ export default function DashboardPage() {
           </Card>
 
           {/* ── Requests list ── */}
-          <Card>
+          <Card className="border-slate-200 bg-white shadow-sm">
             <CardHeader>
-              <CardTitle>All Requests</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-slate-900">All Requests</CardTitle>
+              <CardDescription className="text-slate-500">
                 {requests.length}{' '}
                 {requests.length === 1 ? 'request' : 'requests'} total
               </CardDescription>
@@ -55,12 +55,12 @@ export default function DashboardPage() {
             <CardContent>
               {isLoading ? (
                 <div className="flex items-center justify-center py-16">
-                  <Loader2 className="size-8 animate-spin text-muted-foreground" />
+                  <Loader2 className="size-8 animate-spin text-slate-400" />
                 </div>
               ) : error ? (
-                <div className="flex flex-col items-center justify-center py-16 text-destructive">
+                <div className="flex flex-col items-center justify-center py-16 text-red-600">
                   <p className="text-lg font-medium">Failed to load</p>
-                  <p className="text-sm">{error}</p>
+                  <p className="text-sm text-red-500">{error}</p>
                 </div>
               ) : (
                 <RequestsTable requests={requests} />

@@ -19,28 +19,23 @@ import {
 import type { MaintenanceRequest, Priority, Status } from '@/types';
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Plumbing: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-  Electrical:
-    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-  HVAC: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-  Furniture:
-    'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300',
-  General: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+  Plumbing: 'border-sky-200 bg-sky-50 text-sky-800',
+  Electrical: 'border-sky-200 bg-sky-50 text-sky-800',
+  HVAC: 'border-sky-200 bg-sky-50 text-sky-800',
+  Furniture: 'border-sky-200 bg-sky-50 text-sky-800',
+  General: 'border-sky-200 bg-sky-50 text-sky-800',
 };
 
 const PRIORITY_COLORS: Record<Priority, string> = {
-  Low: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-  Medium:
-    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-  High: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+  Low: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+  Medium: 'border-amber-200 bg-amber-50 text-amber-800',
+  High: 'border-red-200 bg-red-50 text-red-800',
 };
 
 const STATUS_COLORS: Record<Status, string> = {
-  Pending: 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300',
-  'In Progress':
-    'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-  Completed:
-    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+  Pending: 'border-slate-200 bg-slate-50 text-slate-700',
+  'In Progress': 'border-indigo-200 bg-indigo-50 text-indigo-800',
+  Completed: 'border-emerald-200 bg-emerald-50 text-emerald-800',
 };
 
 interface RequestsTableProps {
@@ -50,8 +45,8 @@ interface RequestsTableProps {
 export function RequestsTable({ requests }: RequestsTableProps) {
   if (requests.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-        <p className="text-lg font-medium">No requests yet</p>
+      <div className="flex flex-col items-center justify-center py-16 text-slate-400">
+        <p className="text-lg font-medium text-slate-500">No requests yet</p>
         <p className="text-sm">
           Create your first maintenance request to get started.
         </p>
@@ -76,16 +71,16 @@ export function RequestsTable({ requests }: RequestsTableProps) {
         {requests.map((req) => (
           <TableRow key={req.id}>
             {/* ID */}
-            <TableCell className="font-medium">{req.id}</TableCell>
+            <TableCell className="font-medium text-slate-900">{req.id}</TableCell>
 
             {/* Title + AI Summary */}
             <TableCell className="max-w-xs">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="cursor-default">
-                    <p className="truncate font-medium">{req.title}</p>
+                    <p className="truncate font-medium text-slate-900">{req.title}</p>
                     {req.ai_summary && (
-                      <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+                      <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
                         <Sparkles className="size-3 shrink-0 text-amber-500" />
                         {req.ai_summary}
                       </p>
@@ -129,7 +124,7 @@ export function RequestsTable({ requests }: RequestsTableProps) {
             </TableCell>
 
             {/* Created At */}
-            <TableCell className="text-right text-muted-foreground">
+            <TableCell className="text-right text-slate-500">
               {new Date(req.created_at).toLocaleDateString()}
             </TableCell>
           </TableRow>
