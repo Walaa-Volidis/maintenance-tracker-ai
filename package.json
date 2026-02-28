@@ -1,0 +1,11 @@
+{
+  "name": "maintenance-tracker-ai",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "dev": "cd frontend && npm run dev"
+  },
+  "dependencies": {
+    "next": "16.1.6"
+  }
+}
