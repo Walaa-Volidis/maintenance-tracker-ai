@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, ClipboardList, Sparkles, Zap } from 'lucide-react';
+import { AlertTriangle, ClipboardList, Sparkles } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
