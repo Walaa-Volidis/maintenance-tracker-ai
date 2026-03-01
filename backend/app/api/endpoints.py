@@ -9,7 +9,7 @@ router = APIRouter(tags=["Maintenance Requests"])
 
 
 @router.post(
-    "/",
+    "",
     response_model=RequestResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Create a maintenance request",
@@ -23,7 +23,7 @@ def create_maintenance_request(
 
 
 @router.get(
-    "/",
+    "",
     response_model=list[RequestResponse],
     summary="List all maintenance requests",
 )
