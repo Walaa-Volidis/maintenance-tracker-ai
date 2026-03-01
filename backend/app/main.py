@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.endpoints import router as requests_router
+from app.api.endpoints import analytics_router, router as requests_router
 from app.core.config import settings
 from app.database import Base, engine
 
@@ -24,6 +24,7 @@ app.add_middleware(
 )
 
 app.include_router(requests_router, prefix="/api/requests")
+app.include_router(analytics_router, prefix="/api/analytics/stats")
 
 
 @app.get("/")
