@@ -42,3 +42,11 @@ class RequestResponse(BaseModel):
     priority: Priority
     status: Status
     created_at: datetime
+
+
+class AnalyticsStats(BaseModel):
+    """Aggregated dashboard statistics."""
+
+    total_requests: int = 0
+    most_common_category: str | None = None
+    high_priority_count: int = 0

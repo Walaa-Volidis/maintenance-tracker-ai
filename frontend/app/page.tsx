@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 
 import { RequestForm } from '@/components/request-form';
 import { RequestsTable } from '@/components/requests-table';
+import { StatsCards } from '@/components/stats-cards';
 import {
   Card,
   CardContent,
@@ -11,10 +12,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useAnalytics } from '@/hooks/use-analytics';
 import { useRequests } from '@/hooks/use-requests';
 
 export default function DashboardPage() {
   const { requests, isLoading, error, createRequest } = useRequests();
+  const { stats, isLoading: statsLoading } = useAnalytics();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -29,6 +32,11 @@ export default function DashboardPage() {
 
       {/* ── Main grid ── */}
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        {/* ── Stats cards ── */}
+        <div className="mb-8">
+          <StatsCards stats={stats} isLoading={statsLoading} />
+        </div>
+
         <div className="grid gap-8 lg:grid-cols-[380px_1fr]">
           {/* ── Create form ── */}
           <Card className="h-fit border-slate-200 bg-white shadow-sm">

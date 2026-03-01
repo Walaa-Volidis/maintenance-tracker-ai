@@ -18,3 +18,9 @@ export interface MaintenanceRequestCreate {
   priority?: Priority;
   status?: Status;
 }
+
+export interface AnalyticsStats {
+  total_requests: number;
+  most_common_category: string | null;
+  high_priority_count: number;
+}
