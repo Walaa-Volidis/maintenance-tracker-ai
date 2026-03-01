@@ -19,6 +19,13 @@ export interface MaintenanceRequestCreate {
   status?: Status;
 }
 
+export interface PaginatedResponse {
+  items: MaintenanceRequest[];
+  total: number;
+  page: number;
+  pages: number;
+}
+
 export interface AnalyticsStats {
   total_requests: number;
   most_common_category: string | null;

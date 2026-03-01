@@ -57,24 +57,31 @@ class TestCreateRequest:
 # ── GET /api/requests ──────────────────────────────────────────────
 
 class TestGetAllRequests:
-    """Tests for the list-requests endpoint."""
+    """Tests for the list-requests endpoint (paginated)."""
 
     def test_get_requests_empty(self, client: TestClient):
         response = client.get("/api/requests")
         assert response.status_code == 200
-        assert response.json() == []
+        data = response.json()
+        assert data["items"] == []
+        assert data["total"] == 0
+        assert data["page"] == 1
+        assert data["pages"] == 1
 
-    def test_get_requests_returns_list(self, client: TestClient):
+    def test_get_requests_returns_paginated(self, client: TestClient):
         # Seed two records
         client.post("/api/requests", json=SAMPLE_REQUEST)
         client.post("/api/requests", json=HIGH_PRIORITY_REQUEST)
 
-        response = client.get("/api/requests")
+        response = client.get("/api/requests", params={"skip": 0, "limit": 5})
         data = response.json()
 
         assert response.status_code == 200
-        assert isinstance(data, list)
-        assert len(data) == 2
+        assert isinstance(data["items"], list)
+        assert len(data["items"]) == 2
+        assert data["total"] == 2
+        assert data["page"] == 1
+        assert data["pages"] == 1
 
     def test_get_requests_newest_first(self, client: TestClient):
         client.post("/api/requests", json=SAMPLE_REQUEST)
@@ -83,8 +90,27 @@ class TestGetAllRequests:
         data = client.get("/api/requests").json()
 
         # Second record was created later → should be first in the list
-        assert data[0]["title"] == HIGH_PRIORITY_REQUEST["title"]
-        assert data[1]["title"] == SAMPLE_REQUEST["title"]
+        assert data["items"][0]["title"] == HIGH_PRIORITY_REQUEST["title"]
+        assert data["items"][1]["title"] == SAMPLE_REQUEST["title"]
+
+    def test_pagination_limit(self, client: TestClient):
+        """When limit=1, only one item should be returned per page."""
+        client.post("/api/requests", json=SAMPLE_REQUEST)
+        client.post("/api/requests", json=HIGH_PRIORITY_REQUEST)
+
+        data = client.get("/api/requests", params={"skip": 0, "limit": 1}).json()
+        assert len(data["items"]) == 1
+        assert data["total"] == 2
+        assert data["pages"] == 2
+
+    def test_pagination_skip(self, client: TestClient):
+        """Skipping records should return the correct page."""
+        client.post("/api/requests", json=SAMPLE_REQUEST)
+        client.post("/api/requests", json=HIGH_PRIORITY_REQUEST)
+
+        data = client.get("/api/requests", params={"skip": 1, "limit": 1}).json()
+        assert len(data["items"]) == 1
+        assert data["page"] == 2
 
 
 # ── GET /api/analytics/stats ──────────────────────────────────────

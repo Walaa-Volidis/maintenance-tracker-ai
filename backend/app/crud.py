@@ -29,10 +29,29 @@ def create_request(db: Session, payload: RequestCreate) -> MaintenanceRequest:
     return db_request
 
 
-def get_all_requests(db: Session) -> list[MaintenanceRequest]:
-    """Return every maintenance request, newest first."""
-    stmt = select(MaintenanceRequest).order_by(MaintenanceRequest.created_at.desc())
-    return list(db.scalars(stmt).all())
+def get_all_requests(
+    db: Session, *, skip: int = 0, limit: int = 5
+) -> dict:
+    """Return a paginated list of maintenance requests, newest first."""
+    total = db.scalar(select(func.count(MaintenanceRequest.id))) or 0
+
+    stmt = (
+        select(MaintenanceRequest)
+        .order_by(MaintenanceRequest.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    items = list(db.scalars(stmt).all())
+
+    page = (skip // limit) + 1 if limit > 0 else 1
+    pages = max(1, -(-total // limit)) if limit > 0 else 1 
+
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "pages": pages,
+    }
 
 
 def get_analytics_stats(db: Session) -> dict:

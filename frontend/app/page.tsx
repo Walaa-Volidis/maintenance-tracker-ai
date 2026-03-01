@@ -16,7 +16,16 @@ import { useAnalytics } from '@/hooks/use-analytics';
 import { useRequests } from '@/hooks/use-requests';
 
 export default function DashboardPage() {
-  const { requests, isLoading, error, createRequest } = useRequests();
+  const {
+    requests,
+    isLoading,
+    error,
+    page,
+    pages,
+    total,
+    setPage,
+    createRequest,
+  } = useRequests();
   const { stats, isLoading: statsLoading } = useAnalytics();
 
   return (
@@ -56,8 +65,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="text-slate-900">All Requests</CardTitle>
               <CardDescription className="text-slate-500">
-                {requests.length}{' '}
-                {requests.length === 1 ? 'request' : 'requests'} total
+                {total} {total === 1 ? 'request' : 'requests'} total
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -71,7 +79,12 @@ export default function DashboardPage() {
                   <p className="text-sm text-red-500">{error}</p>
                 </div>
               ) : (
-                <RequestsTable requests={requests} />
+                <RequestsTable
+                  requests={requests}
+                  page={page}
+                  pages={pages}
+                  onPageChange={setPage}
+                />
               )}
             </CardContent>
           </Card>

@@ -44,6 +44,15 @@ class RequestResponse(BaseModel):
     created_at: datetime
 
 
+class PaginatedResponse(BaseModel):
+    """Paginated list of maintenance requests."""
+
+    items: list[RequestResponse]
+    total: int
+    page: int
+    pages: int
+
+
 class AnalyticsStats(BaseModel):
     """Aggregated dashboard statistics."""
 

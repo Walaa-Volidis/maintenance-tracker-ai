@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.crud import create_request, get_all_requests, get_analytics_stats
 from app.database import get_db
-from app.schemas import AnalyticsStats, RequestCreate, RequestResponse
+from app.schemas import AnalyticsStats, PaginatedResponse, RequestCreate, RequestResponse
 
 router = APIRouter(tags=["Maintenance Requests"])
 
@@ -26,14 +26,16 @@ def create_maintenance_request(
 
 @router.get(
     "",
-    response_model=list[RequestResponse],
-    summary="List all maintenance requests",
+    response_model=PaginatedResponse,
+    summary="List maintenance requests (paginated)",
 )
 def list_maintenance_requests(
+    skip: int = Query(0, ge=0, description="Number of records to skip"),
+    limit: int = Query(5, ge=1, le=100, description="Max records per page"),
     db: Session = Depends(get_db),
-) -> list[RequestResponse]:
-    """Return all maintenance requests ordered by newest first."""
-    return get_all_requests(db)
+) -> PaginatedResponse:
+    """Return a paginated list of maintenance requests, newest first."""
+    return get_all_requests(db, skip=skip, limit=limit)
 
 
 @analytics_router.get(
